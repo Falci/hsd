@@ -29,7 +29,7 @@ jobs:
       run: npm run lint
 
     - name: Build Docs
-      if: ${{ matrix.node eq '14.x' }}
+      if: ${{ matrix.node == '14.x' }}
       run: npm run build-docs
 
     - name: Test
