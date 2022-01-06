@@ -29,7 +29,7 @@ const CLOUDFLARE = reserved.getByName('cloudflare');
 
 // Keep track of expected on-chain total value
 let AUDIT = consensus.GENESIS_REWARD;
-const REWARD = consensus.BASE_REWARD;
+let REWARD = consensus.BASE_REWARD;
 
 function check() {
   assert.strictEqual(AUDIT, node.chain.db.state.value);
@@ -40,12 +40,9 @@ async function mineBlocks(n, addr) {
   for (let i = 0; i < n; i++) {
     const block = await node.miner.mineBlock(null, addr);
     await node.chain.add(block);
+    REWARD = consensus.getReward(node.chain.height, network.halvingInterval);
     AUDIT += REWARD;
   }
-
-  // Don't worry about decreasing block subsidies
-  if (node.chain.height >= network.halvingInterval)
-    assert(false, 'Too many blocks for this test!');
 }
 
 describe('Reserved Name Claims', function() {
@@ -71,8 +68,9 @@ describe('Reserved Name Claims', function() {
     ownership.ignore = false;
   });
 
-  it('should fund wallet and activate soft fork', async () => {
-    await mineBlocks(network.deflationHeight + 1, addr);
+  it('should fund wallet and activate hard fork', async () => {
+    this.timeout(20000);
+    await mineBlocks(network.names.originalClaimPeriod + 1, addr);
     check();
   });
 
