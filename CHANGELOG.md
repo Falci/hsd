@@ -1,5 +1,9 @@
 # HSD Release Notes & Changelog
 
+### vX.Y.Z
+
+- New option `--agent=<content>`: adds a suffix to the agent string to peer can recognize you.
+
 ## v3.0.0
 
 **When upgrading to this version of hsd you must pass
