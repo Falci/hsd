@@ -78,6 +78,7 @@ describe('BIP9 activation', function() {
     const state = await getHardeningState(chain.tip);
     assert.strictEqual(state, thresholdStates.DEFINED);
     assert(!await hasHardening());
+    assert(network.deploymentState.hardening === false);
   });
 
   it('should advance from DEFINED to STARTED', async () => {
@@ -89,6 +90,7 @@ describe('BIP9 activation', function() {
     const state2 = await getHardeningState(chain.tip);
     assert.strictEqual(state2, thresholdStates.STARTED);
     assert(!await hasHardening());
+    assert(network.deploymentState.hardening === false);
   });
 
   it('should add blocks: does not reach LOCKED_IN', async () => {
@@ -125,6 +127,7 @@ describe('BIP9 activation', function() {
     const state2 = await getHardeningState(chain.tip);
     assert.strictEqual(state2, thresholdStates.STARTED);
     assert(!await hasHardening());
+    assert(network.deploymentState.hardening === false);
   });
 
   it('should add blocks: reaches LOCKED_IN status', async () => {
@@ -148,6 +151,7 @@ describe('BIP9 activation', function() {
     const state2 = await getHardeningState(chain.tip);
     assert.strictEqual(state2, thresholdStates.LOCKED_IN);
     assert(!await hasHardening());
+    assert(network.deploymentState.hardening === false);
   });
 
   it('should add blocks: reaches ACTIVE status', async () => {
@@ -159,6 +163,7 @@ describe('BIP9 activation', function() {
     const state2 = await getHardeningState(chain.tip);
     assert.strictEqual(state2, thresholdStates.ACTIVE);
     assert(await hasHardening());
+    assert(network.deploymentState.hardening === true);
   });
 
   it('should throw error if not STARTED', async () => {
